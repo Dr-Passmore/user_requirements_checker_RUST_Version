@@ -9,7 +9,7 @@ fn main() {
 
     // Creates the user requirements list in the same string format - example "US001"
     for i in 1..=85 {
-        let us = if 1 < 10 {format!("US00{}", i)} else {format!("US0{}", i)};
+        let us = if i < 10 {format!("US00{}", i)} else {format!("US0{}", i)};
         // Add each to list of user stories
         list_of_user_stories.insert(us);
     }
@@ -24,8 +24,11 @@ fn main() {
             used_items.insert(j);
         }
     }
+    // compare the two lists and any user stories not referenced are a new hashset 
+    let remaining_user_requirements: HashSet<String> = list_of_user_stories.difference(&used_items).map(|s| s.to_string()).collect();
 
-
-   println!("{}",data);
-   println!("{}", requirements);
+    // calculate percentage
+    let percentage = ((used_items.len() as f64) / (list_of_user_stories.len() as f64) * 100.0).round();
+    println!("The percentage of user stories currently covered by the {} requirements is {}%. {} user stories have not been referenced.", requirements, percentage, list_of_user_stories.len() - used_items.len());
+    println!("The user stories that have not been referenced are: {:?}", remaining_user_requirements);
 }
